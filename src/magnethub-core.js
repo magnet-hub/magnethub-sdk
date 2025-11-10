@@ -48,7 +48,7 @@ class MagnetHubCore {
     if (this.iframe && this.iframe.contentWindow) {
       this.iframe.contentWindow.postMessage(
         { event, data, source: 'magnethub-core' },
-        '*'
+        '*',
       );
     } else {
       console.warn('MagnetHub: Cannot send message, iframe not available.');
@@ -64,7 +64,7 @@ class MagnetHubCore {
   on(event, callback) {
     if (typeof callback !== 'function') {
       console.warn(
-        `MagnetHub: Callback for event "${event}" must be a function.`
+        `MagnetHub: Callback for event "${event}" must be a function.`,
       );
       return;
     }

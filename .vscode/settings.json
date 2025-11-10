@@ -1,24 +1,27 @@
 {
-  // Completely disable all formatting
-  "editor.formatOnSave": false,
+  // Use ESLint for formatting
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnSave": true,
   "editor.formatOnPaste": false,
   "editor.formatOnType": false,
-  "editor.defaultFormatter": null,
+  
+  // ESLint settings
+  "eslint.format.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
   
   // Disable Prettier
   "prettier.enable": false,
-  
-  // Only ESLint auto-fix (no formatting)
-  "editor.codeActionsOnSave": {},
 
-  // File-specific - explicitly disable formatting
+  // File-specific - use ESLint for JavaScript
   "[javascript]": {
-    "editor.defaultFormatter": null,
-    "editor.formatOnSave": false
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": true
   },
   "[json]": {
-    "editor.defaultFormatter": null,
-    "editor.formatOnSave": false
+    "editor.defaultFormatter": "vscode.json-language-features",
+    "editor.formatOnSave": true
   },
   "[markdown]": {
     "editor.defaultFormatter": null,
