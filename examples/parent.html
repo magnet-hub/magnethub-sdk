@@ -81,7 +81,47 @@
   </div>
 
   <script type="module">
-    import MagnetHubCore from '../src/magnethub-core.js';
+    // Inline MagnetHub Core SDK for standalone example
+    class MagnetHubCore {
+      constructor({ iframeId, apiKey }) {
+        this.iframe = document.getElementById(iframeId);
+        this.apiKey = apiKey;
+        this.events = {};
+
+        if (!this.iframe) {
+          console.warn(`MagnetHub: Iframe with id "${iframeId}" not found.`);
+        }
+
+        window.addEventListener('message', (e) => this._handleMessage(e));
+      }
+
+      send(event, data = null) {
+        if (this.iframe && this.iframe.contentWindow) {
+          this.iframe.contentWindow.postMessage(
+            { event, data, source: 'magnethub-core' },
+            '*'
+          );
+        } else {
+          console.warn('MagnetHub: Cannot send message, iframe not available.');
+        }
+      }
+
+      on(event, callback) {
+        if (typeof callback !== 'function') {
+          console.warn(`MagnetHub: Callback for event "${event}" must be a function.`);
+          return;
+        }
+        this.events[event] = callback;
+      }
+
+      _handleMessage(e) {
+        const { event, data, source } = e.data || {};
+        
+        if (source === 'magnethub-game' && event && this.events[event]) {
+          this.events[event](data);
+        }
+      }
+    }
     
     const log = document.getElementById('log');
     

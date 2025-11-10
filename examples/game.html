@@ -102,7 +102,40 @@
   </div>
 
   <script type="module">
-    import MagnetHubGame from '../src/magnethub-game.js';
+    // Inline MagnetHub Game SDK for standalone example
+    class MagnetHubGame {
+      constructor() {
+        this.events = {};
+        window.addEventListener('message', (e) => this._handleMessage(e));
+      }
+
+      send(event, data = null) {
+        if (window.parent) {
+          window.parent.postMessage(
+            { event, data, source: 'magnethub-game' },
+            '*'
+          );
+        } else {
+          console.warn('MagnetHub: Cannot send message, no parent window available.');
+        }
+      }
+
+      on(event, callback) {
+        if (typeof callback !== 'function') {
+          console.warn(`MagnetHub: Callback for event "${event}" must be a function.`);
+          return;
+        }
+        this.events[event] = callback;
+      }
+
+      _handleMessage(e) {
+        const { event, data, source } = e.data || {};
+        
+        if (source === 'magnethub-core' && event && this.events[event]) {
+          this.events[event](data);
+        }
+      }
+    }
     
     const hub = new MagnetHubGame();
     const scoreElement = document.getElementById('score');
