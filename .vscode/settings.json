@@ -4,15 +4,12 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": false,
   "editor.formatOnType": false,
-  
+
   // ESLint settings
   "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  
-  // Disable Prettier
-  "prettier.enable": false,
 
   // File-specific - use ESLint for JavaScript
   "[javascript]": {
@@ -45,8 +42,5 @@
     "**/node_modules": true,
     "**/dist": true,
     "**/package-lock.json": true
-  },
-
-  // Recommendations
-  "extensions.ignoreRecommendations": false
+  }
 }
