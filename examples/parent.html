@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MagnetHub Parent Example</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h2 {
+      color: #333;
+    }
+    .controls {
+      margin: 20px 0;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    button.danger {
+      background-color: #f44336;
+    }
+    button.danger:hover {
+      background-color: #da190b;
+    }
+    #gameFrame {
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      background: white;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .log {
+      margin-top: 20px;
+      padding: 15px;
+      background: #333;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      border-radius: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 12px;
+    }
+    .log div {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <h2>🧲 MagnetHub Parent Page</h2>
+  
+  <div class="controls">
+    <h3>Controls</h3>
+    <button id="startGame">▶️ Start Game</button>
+    <button id="pauseGame">⏸️ Pause Game</button>
+    <button id="resumeGame">▶️ Resume Game</button>
+    <button id="resetGame" class="danger">🔄 Reset Game</button>
+  </div>
+
+  <iframe id="gameFrame" src="game.html" width="800" height="600"></iframe>
+
+  <div class="log" id="log">
+    <div>📡 Console Log:</div>
+  </div>
+
+  <script type="module">
+    import MagnetHubCore from '../src/magnethub-core.js';
+    
+    const log = document.getElementById('log');
+    
+    function addLog(message) {
+      const entry = document.createElement('div');
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    // Initialize MagnetHub SDK
+    const hub = new MagnetHubCore({ iframeId: 'gameFrame', apiKey: 'demo-api-key-xyz' });
+    addLog('✅ MagnetHub SDK initialized');
+
+    // Listen for events from the game
+    hub.on('gameLoaded', (data) => {
+      addLog('🎮 Game loaded successfully');
+      console.log('Game loaded:', data);
+    });
+
+    hub.on('score', (data) => {
+      addLog(`🎯 Score received: ${data.score}`);
+      console.log('Score:', data);
+    });
+
+    hub.on('gameOver', (data) => {
+      addLog(`🏁 Game over! Final score: ${data.score}`);
+      console.log('Game over:', data);
+    });
+
+    hub.on('gamePaused', () => {
+      addLog('⏸️ Game paused');
+    });
+
+    hub.on('gameResumed', () => {
+      addLog('▶️ Game resumed');
+    });
+
+    // Control buttons
+    document.getElementById('startGame').addEventListener('click', () => {
+      hub.send('startGame', { level: 1 });
+      addLog('📤 Sent: startGame');
+    });
+
+    document.getElementById('pauseGame').addEventListener('click', () => {
+      hub.send('pauseGame', { reason: 'User clicked pause' });
+      addLog('📤 Sent: pauseGame');
+    });
+
+    document.getElementById('resumeGame').addEventListener('click', () => {
+      hub.send('resumeGame');
+      addLog('📤 Sent: resumeGame');
+    });
+
+    document.getElementById('resetGame').addEventListener('click', () => {
+      hub.send('resetGame');
+      addLog('📤 Sent: resetGame');
+    });
+
+    // Auto-send start game after iframe loads
+    setTimeout(() => {
+      hub.send('startGame', { level: 1 });
+      addLog('📤 Auto-sent: startGame');
+    }, 1000);
+  </script>
+</body>
+</html>

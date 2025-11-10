@@ -1,0 +1,45 @@
+{
+  "name": "@magnethub/sdk",
+  "version": "0.1.0",
+  "description": "Two-way communication SDK for iframe-based WebGL games.",
+  "main": "src/magnethub-core.js",
+  "type": "module",
+  "types": "index.d.ts",
+  "keywords": [
+    "sdk",
+    "iframe",
+    "game",
+    "webgl",
+    "unity",
+    "godot",
+    "magnethub"
+  ],
+  "scripts": {
+    "build": "echo 'No build needed yet'",
+    "test": "echo 'No tests yet'",
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint src/**/*.js --fix",
+    "format": "prettier --write \"**/*.{js,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,json,md}\""
+  },
+  "author": "MagnetHub Team",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magnet-hub/magnethub-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/magnet-hub/magnethub-sdk/issues"
+  },
+  "homepage": "https://github.com/magnet-hub/magnethub-sdk#readme",
+  "devDependencies": {
+    "eslint": "^8.50.0",
+    "prettier": "^3.0.3"
+  },
+  "files": [
+    "src/",
+    "index.d.ts",
+    "LICENSE",
+    "README.md"
+  ]
+}

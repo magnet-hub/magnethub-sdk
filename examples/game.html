@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MagnetHub Game Example</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    h2 {
+      margin: 0 0 20px 0;
+    }
+    .game-container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    .score {
+      font-size: 48px;
+      font-weight: bold;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    button {
+      padding: 12px 24px;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .status {
+      text-align: center;
+      font-size: 18px;
+      margin: 10px 0;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 6px;
+    }
+    .log {
+      margin-top: 20px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 6px;
+      font-size: 12px;
+      max-height: 150px;
+      overflow-y: auto;
+      width: 100%;
+      font-family: 'Courier New', monospace;
+    }
+    .log div {
+      margin: 3px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h2>🎮 MagnetHub Game Demo</h2>
+    
+    <div class="status" id="status">Waiting for start...</div>
+    
+    <div class="score" id="score">0</div>
+    
+    <div class="controls">
+      <button id="sendScore">📊 Send Score</button>
+      <button id="addPoints">➕ Add Points</button>
+      <button id="gameOver">🏁 Game Over</button>
+    </div>
+
+    <div class="log" id="log">
+      <div>📡 Game Console:</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import MagnetHubGame from '../src/magnethub-game.js';
+    
+    const hub = new MagnetHubGame();
+    const scoreElement = document.getElementById('score');
+    const statusElement = document.getElementById('status');
+    const log = document.getElementById('log');
+    
+    let score = 0;
+    let gameState = 'waiting'; // waiting, playing, paused
+    
+    function addLog(message) {
+      const entry = document.createElement('div');
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function updateScore(newScore) {
+      score = newScore;
+      scoreElement.textContent = score;
+    }
+
+    function updateStatus(status) {
+      gameState = status;
+      const statusMessages = {
+        waiting: '⏳ Waiting for start...',
+        playing: '▶️ Game is running',
+        paused: '⏸️ Game paused'
+      };
+      statusElement.textContent = statusMessages[status] || status;
+    }
+
+    // Notify parent that game is loaded
+    hub.send('gameLoaded', { timestamp: Date.now() });
+    addLog('✅ Game SDK initialized');
+    addLog('📤 Sent: gameLoaded');
+
+    // Listen for events from parent
+    hub.on('startGame', (data) => {
+      updateStatus('playing');
+      updateScore(0);
+      addLog(`📥 Received: startGame (level ${data?.level || 1})`);
+    });
+
+    hub.on('pauseGame', (data) => {
+      updateStatus('paused');
+      addLog(`📥 Received: pauseGame (${data?.reason || 'no reason'})`);
+      hub.send('gamePaused');
+    });
+
+    hub.on('resumeGame', () => {
+      updateStatus('playing');
+      addLog('📥 Received: resumeGame');
+      hub.send('gameResumed');
+    });
+
+    hub.on('resetGame', () => {
+      updateStatus('playing');
+      updateScore(0);
+      addLog('📥 Received: resetGame');
+    });
+
+    // Button controls
+    document.getElementById('sendScore').addEventListener('click', () => {
+      hub.send('score', { score });
+      addLog(`📤 Sent: score (${score})`);
+    });
+
+    document.getElementById('addPoints').addEventListener('click', () => {
+      if (gameState === 'playing') {
+        const points = Math.floor(Math.random() * 100) + 10;
+        updateScore(score + points);
+        hub.send('score', { score });
+        addLog(`➕ Added ${points} points (total: ${score})`);
+      }
+    });
+
+    document.getElementById('gameOver').addEventListener('click', () => {
+      hub.send('gameOver', { score, timestamp: Date.now() });
+      updateStatus('waiting');
+      addLog(`📤 Sent: gameOver (final score: ${score})`);
+    });
+
+    // Auto-increment score while playing (for demo purposes)
+    setInterval(() => {
+      if (gameState === 'playing') {
+        updateScore(score + 1);
+      }
+    }, 2000);
+  </script>
+</body>
+</html>
