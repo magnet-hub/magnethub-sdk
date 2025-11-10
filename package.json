@@ -1,5 +1,5 @@
 {
-  "name": "@magnethub/sdk",
+  "name": "magnethub-sdk",
   "version": "0.1.0",
   "description": "Two-way communication SDK for iframe-based WebGL games.",
   "main": "src/magnethub-core.js",
@@ -24,7 +24,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/magnet-hub/magnethub-sdk.git"
+    "url": "git+https://github.com/magnet-hub/magnethub-sdk.git"
   },
   "bugs": {
     "url": "https://github.com/magnet-hub/magnethub-sdk/issues"
