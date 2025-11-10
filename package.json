@@ -40,6 +40,10 @@
     "src/",
     "index.d.ts",
     "LICENSE",
-    "README.md"
-  ]
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  }
 }

@@ -23,13 +23,34 @@
 ### Using npm
 
 ```bash
+# Latest version
 npm install @magnethub/sdk
+
+# Specific version
+npm install @magnethub/sdk@0.1.0
 ```
 
-### Using CDN
+### Using CDN (unpkg)
 
 ```html
-<script type="module" src="https://unpkg.com/@magnethub/sdk/src/magnethub-core.js"></script>
+<!-- Latest version -->
+<script type="module">
+  import MagnetHubCore from 'https://unpkg.com/@magnethub/sdk/src/magnethub-core.js';
+</script>
+
+<!-- Specific version (recommended for production) -->
+<script type="module">
+  import MagnetHubCore from 'https://unpkg.com/@magnethub/sdk@0.1.0/src/magnethub-core.js';
+</script>
+```
+
+### Using CDN (jsDelivr)
+
+```html
+<!-- Specific version -->
+<script type="module">
+  import MagnetHubCore from 'https://cdn.jsdelivr.net/npm/@magnethub/sdk@0.1.0/src/magnethub-core.js';
+</script>
 ```
 
 ### Direct Download
@@ -37,7 +58,18 @@ npm install @magnethub/sdk
 Clone or download from [GitHub](https://github.com/magnet-hub/magnethub-sdk):
 
 ```bash
+# Clone latest
 git clone https://github.com/magnet-hub/magnethub-sdk.git
+
+# Clone specific version
+git clone --branch v0.1.0 https://github.com/magnet-hub/magnethub-sdk.git
+```
+
+### Check SDK Version
+
+```javascript
+import MagnetHubCore from '@magnethub/sdk';
+console.log(MagnetHubCore.VERSION); // "0.1.0"
 ```
 
 ---
@@ -290,6 +322,8 @@ const game = new Phaser.Game(config);
 ## 📚 Documentation
 
 - [API Documentation](docs/api.md) - Complete API reference
+- [Versioning Guide](VERSIONING.md) - Version management and CDN usage
+- [Changelog](CHANGELOG.md) - Release history and updates
 - [Contributing Guide](CONTRIBUTING.md) - How to contribute
 - [Examples](examples/) - Working examples
 

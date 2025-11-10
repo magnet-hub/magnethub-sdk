@@ -1,15 +1,24 @@
+import { VERSION } from './version.js';
+
 /**
  * MagnetHub Core SDK - Parent Page
  * 
  * Enables two-way communication between a parent page and an embedded game iframe.
  * 
  * @class MagnetHubCore
+ * @version 0.1.0
  * @example
  * const hub = new MagnetHubCore({ iframeId: 'gameFrame', apiKey: 'XYZ' });
  * hub.on('score', data => console.log('Score:', data));
  * hub.send('pauseGame', { reason: 'User clicked pause' });
  */
 class MagnetHubCore {
+  /**
+   * SDK Version
+   * @static
+   * @type {string}
+   */
+  static VERSION = VERSION;
   /**
    * Creates an instance of MagnetHubCore.
    * 

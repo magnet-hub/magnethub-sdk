@@ -1,15 +1,24 @@
+import { VERSION } from './version.js';
+
 /**
  * MagnetHub Game SDK - Iframe/Game Side
  * 
  * Enables two-way communication between an embedded game and its parent page.
  * 
  * @class MagnetHubGame
+ * @version 0.1.0
  * @example
  * const hub = new MagnetHubGame();
  * hub.send('gameLoaded');
  * hub.on('pauseGame', () => console.log('Game paused'));
  */
 class MagnetHubGame {
+  /**
+   * SDK Version
+   * @static
+   * @type {string}
+   */
+  static VERSION = VERSION;
   /**
    * Creates an instance of MagnetHubGame.
    * Automatically sets up message listener for parent communication.
