@@ -55,12 +55,14 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 ### Setup Steps
 
 1. **Fork and clone the repository**
+
    ```bash
    git clone https://github.com/YOUR-USERNAME/magnethub-sdk.git
    cd magnethub-sdk
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
@@ -74,10 +76,13 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 ## Pull Request Process
 
 1. **Create a feature branch**
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
+
    or
+
    ```bash
    git checkout -b fix/your-bug-fix
    ```
@@ -93,12 +98,14 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
    - Verify no console errors
 
 4. **Commit your changes**
+
    ```bash
    git add .
    git commit -m "feat: add new feature"
    ```
 
 5. **Push to your fork**
+
    ```bash
    git push origin feature/your-feature-name
    ```
@@ -116,6 +123,7 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 We follow ES6+ standards with the following conventions:
 
 - **Use ES6 classes and modules**
+
   ```javascript
   class MyClass {
     constructor() {
@@ -126,21 +134,24 @@ We follow ES6+ standards with the following conventions:
   ```
 
 - **Use const/let instead of var**
+
   ```javascript
   const immutableValue = 'value';
   let mutableValue = 0;
   ```
 
 - **Use arrow functions for callbacks**
+
   ```javascript
-  array.map(item => item.value);
+  array.map((item) => item.value);
   ```
 
 - **Add JSDoc comments**
+
   ```javascript
   /**
    * Sends a message to the target.
-   * 
+   *
    * @param {string} event - The event name
    * @param {*} data - The data to send
    */
@@ -150,10 +161,11 @@ We follow ES6+ standards with the following conventions:
   ```
 
 - **Use meaningful variable names**
+
   ```javascript
   // Good
   const userScore = 100;
-  
+
   // Bad
   const x = 100;
   ```

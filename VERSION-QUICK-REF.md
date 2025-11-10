@@ -76,7 +76,7 @@ console.log('Game Version:', MagnetHubGame.VERSION);
 ```json
 {
   "dependencies": {
-    "@magnethub/sdk": "0.1.0"     // Exact version (recommended)
+    "@magnethub/sdk": "0.1.0" // Exact version (recommended)
   }
 }
 ```
@@ -84,7 +84,7 @@ console.log('Game Version:', MagnetHubGame.VERSION);
 ```json
 {
   "dependencies": {
-    "@magnethub/sdk": "^0.1.0"    // Allow minor & patch updates
+    "@magnethub/sdk": "^0.1.0" // Allow minor & patch updates
   }
 }
 ```
@@ -92,7 +92,7 @@ console.log('Game Version:', MagnetHubGame.VERSION);
 ```json
 {
   "dependencies": {
-    "@magnethub/sdk": "~0.1.0"    // Allow patch updates only
+    "@magnethub/sdk": "~0.1.0" // Allow patch updates only
   }
 }
 ```
@@ -171,12 +171,14 @@ npm info @magnethub/sdk
 ## 🔐 Production Best Practices
 
 ✅ **DO:**
+
 - Use exact versions in production: `"@magnethub/sdk": "0.1.0"`
 - Test new versions in development before upgrading
 - Lock dependencies with `package-lock.json`
 - Specify versions in CDN URLs
 
 ❌ **DON'T:**
+
 - Use `"latest"` in package.json
 - Skip reading CHANGELOG.md before upgrading
 - Use unversioned CDN URLs in production

@@ -81,33 +81,33 @@ console.log(MagnetHubCore.VERSION); // "0.1.0"
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Game Platform</title>
-</head>
-<body>
-  <iframe id="gameFrame" src="game.html" width="800" height="600"></iframe>
+  <head>
+    <title>Game Platform</title>
+  </head>
+  <body>
+    <iframe id="gameFrame" src="game.html" width="800" height="600"></iframe>
 
-  <script type="module">
-    import MagnetHubCore from './src/magnethub-core.js';
+    <script type="module">
+      import MagnetHubCore from './src/magnethub-core.js';
 
-    const hub = new MagnetHubCore({ 
-      iframeId: 'gameFrame', 
-      apiKey: 'your-api-key' 
-    });
+      const hub = new MagnetHubCore({
+        iframeId: 'gameFrame',
+        apiKey: 'your-api-key',
+      });
 
-    // Listen for events from the game
-    hub.on('score', (data) => {
-      console.log('Score:', data.score);
-    });
+      // Listen for events from the game
+      hub.on('score', (data) => {
+        console.log('Score:', data.score);
+      });
 
-    hub.on('gameOver', (data) => {
-      console.log('Game Over! Final Score:', data.score);
-    });
+      hub.on('gameOver', (data) => {
+        console.log('Game Over! Final Score:', data.score);
+      });
 
-    // Send events to the game
-    hub.send('startGame', { level: 1 });
-  </script>
-</body>
+      // Send events to the game
+      hub.send('startGame', { level: 1 });
+    </script>
+  </body>
 </html>
 ```
 
@@ -116,41 +116,41 @@ console.log(MagnetHubCore.VERSION); // "0.1.0"
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>My Game</title>
-</head>
-<body>
-  <canvas id="gameCanvas"></canvas>
+  <head>
+    <title>My Game</title>
+  </head>
+  <body>
+    <canvas id="gameCanvas"></canvas>
 
-  <script type="module">
-    import MagnetHubGame from './src/magnethub-game.js';
+    <script type="module">
+      import MagnetHubGame from './src/magnethub-game.js';
 
-    const hub = new MagnetHubGame();
+      const hub = new MagnetHubGame();
 
-    // Notify parent that game is loaded
-    hub.send('gameLoaded');
+      // Notify parent that game is loaded
+      hub.send('gameLoaded');
 
-    // Listen for events from parent
-    hub.on('startGame', (data) => {
-      console.log('Starting game at level:', data.level);
-      // Start game logic here
-    });
+      // Listen for events from parent
+      hub.on('startGame', (data) => {
+        console.log('Starting game at level:', data.level);
+        // Start game logic here
+      });
 
-    hub.on('pauseGame', () => {
-      // Pause game logic
-    });
+      hub.on('pauseGame', () => {
+        // Pause game logic
+      });
 
-    // Send score updates
-    function updateScore(score) {
-      hub.send('score', { score });
-    }
+      // Send score updates
+      function updateScore(score) {
+        hub.send('score', { score });
+      }
 
-    // Send game over event
-    function endGame(finalScore) {
-      hub.send('gameOver', { score: finalScore });
-    }
-  </script>
-</body>
+      // Send game over event
+      function endGame(finalScore) {
+        hub.send('gameOver', { score: finalScore });
+      }
+    </script>
+  </body>
 </html>
 ```
 
@@ -163,10 +163,11 @@ console.log(MagnetHubCore.VERSION); // "0.1.0"
 #### Constructor
 
 ```javascript
-new MagnetHubCore({ iframeId, apiKey })
+new MagnetHubCore({ iframeId, apiKey });
 ```
 
 **Parameters:**
+
 - `iframeId` (string, required) - ID of the iframe element
 - `apiKey` (string, optional) - API key for authentication
 
@@ -197,7 +198,7 @@ hub.on('score', (data) => {
 #### Constructor
 
 ```javascript
-new MagnetHubGame()
+new MagnetHubGame();
 ```
 
 #### Methods
@@ -254,16 +255,19 @@ Create `Assets/Plugins/WebGL/MagnetHubPlugin.jslib`:
 
 ```javascript
 mergeInto(LibraryManager.library, {
-    SendToParent: function(eventName, jsonData) {
-        var event = UTF8ToString(eventName);
-        var data = JSON.parse(UTF8ToString(jsonData));
-        
-        window.parent.postMessage({
-            event: event,
-            data: data,
-            source: 'magnethub-game'
-        }, '*');
-    }
+  SendToParent: function (eventName, jsonData) {
+    var event = UTF8ToString(eventName);
+    var data = JSON.parse(UTF8ToString(jsonData));
+
+    window.parent.postMessage(
+      {
+        event: event,
+        data: data,
+        source: 'magnethub-game',
+      },
+      '*'
+    );
+  },
 });
 ```
 
@@ -282,7 +286,7 @@ func send_to_parent(event_name: String, data: Dictionary):
             source: 'magnethub-game'
         }, '*');
         """ % [event_name, json_data]
-        
+
         JavaScript.eval(js_code)
 
 func _ready():
@@ -300,18 +304,18 @@ import MagnetHubGame from './src/magnethub-game.js';
 const hub = new MagnetHubGame();
 
 const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    scene: {
-        create: function() {
-            hub.send('gameLoaded');
-            
-            hub.on('pauseGame', () => {
-                this.scene.pause();
-            });
-        }
-    }
+  type: Phaser.AUTO,
+  width: 800,
+  height: 600,
+  scene: {
+    create: function () {
+      hub.send('gameLoaded');
+
+      hub.on('pauseGame', () => {
+        this.scene.pause();
+      });
+    },
+  },
 };
 
 const game = new Phaser.Game(config);
@@ -332,12 +336,14 @@ const game = new Phaser.Game(config);
 ## 🧪 Testing Locally
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/magnet-hub/magnethub-sdk.git
    cd magnethub-sdk
    ```
 
 2. Serve the examples:
+
    ```bash
    npx serve examples
    ```
@@ -373,21 +379,21 @@ npx serve examples
 
 ### Parent → Game
 
-| Event | Description | Example Data |
-|-------|-------------|--------------|
-| `startGame` | Start the game | `{ level: 1 }` |
-| `pauseGame` | Pause the game | `{ reason: 'User paused' }` |
-| `resumeGame` | Resume the game | `null` |
-| `resetGame` | Reset the game | `null` |
+| Event        | Description     | Example Data                |
+| ------------ | --------------- | --------------------------- |
+| `startGame`  | Start the game  | `{ level: 1 }`              |
+| `pauseGame`  | Pause the game  | `{ reason: 'User paused' }` |
+| `resumeGame` | Resume the game | `null`                      |
+| `resetGame`  | Reset the game  | `null`                      |
 
 ### Game → Parent
 
-| Event | Description | Example Data |
-|-------|-------------|--------------|
-| `gameLoaded` | Game finished loading | `{ timestamp: 1234567890 }` |
-| `score` | Score update | `{ score: 1000 }` |
-| `gameOver` | Game ended | `{ score: 1500 }` |
-| `levelComplete` | Level completed | `{ level: 1, score: 500 }` |
+| Event           | Description           | Example Data                |
+| --------------- | --------------------- | --------------------------- |
+| `gameLoaded`    | Game finished loading | `{ timestamp: 1234567890 }` |
+| `score`         | Score update          | `{ score: 1000 }`           |
+| `gameOver`      | Game ended            | `{ score: 1500 }`           |
+| `levelComplete` | Level completed       | `{ level: 1, score: 500 }`  |
 
 ---
 

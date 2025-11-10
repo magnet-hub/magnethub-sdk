@@ -21,18 +21,20 @@ The parent page SDK manages communication with an embedded game iframe.
 ### Constructor
 
 ```javascript
-new MagnetHubCore({ iframeId, apiKey })
+new MagnetHubCore({ iframeId, apiKey });
 ```
 
 **Parameters:**
+
 - `iframeId` (string, required) - The DOM ID of the iframe element
 - `apiKey` (string, optional) - API key for authentication
 
 **Example:**
+
 ```javascript
-const hub = new MagnetHubCore({ 
-  iframeId: 'gameFrame', 
-  apiKey: 'your-api-key' 
+const hub = new MagnetHubCore({
+  iframeId: 'gameFrame',
+  apiKey: 'your-api-key',
 });
 ```
 
@@ -43,12 +45,14 @@ const hub = new MagnetHubCore({
 Sends a message to the embedded game iframe.
 
 **Parameters:**
+
 - `event` (string, required) - The event name
 - `data` (any, optional) - Data to send with the event
 
 **Returns:** void
 
 **Example:**
+
 ```javascript
 hub.send('pauseGame', { reason: 'User paused' });
 hub.send('startGame');
@@ -59,12 +63,14 @@ hub.send('startGame');
 Registers a callback to listen for events from the game iframe.
 
 **Parameters:**
+
 - `event` (string, required) - The event name to listen for
 - `callback` (function, required) - Function to call when event is received
 
 **Returns:** void
 
 **Example:**
+
 ```javascript
 hub.on('score', (data) => {
   console.log('Score updated:', data.score);
@@ -84,12 +90,13 @@ The game SDK manages communication from within the embedded iframe to the parent
 ### Constructor
 
 ```javascript
-new MagnetHubGame()
+new MagnetHubGame();
 ```
 
 **Parameters:** None
 
 **Example:**
+
 ```javascript
 const hub = new MagnetHubGame();
 ```
@@ -101,12 +108,14 @@ const hub = new MagnetHubGame();
 Sends a message to the parent page.
 
 **Parameters:**
+
 - `event` (string, required) - The event name
 - `data` (any, optional) - Data to send with the event
 
 **Returns:** void
 
 **Example:**
+
 ```javascript
 hub.send('gameLoaded');
 hub.send('score', { score: 1000 });
@@ -118,12 +127,14 @@ hub.send('gameOver', { score: 1500, timestamp: Date.now() });
 Registers a callback to listen for events from the parent page.
 
 **Parameters:**
+
 - `event` (string, required) - The event name to listen for
 - `callback` (function, required) - Function to call when event is received
 
 **Returns:** void
 
 **Example:**
+
 ```javascript
 hub.on('pauseGame', (data) => {
   console.log('Pausing game:', data.reason);
@@ -162,25 +173,25 @@ While you can define custom events, here are some recommended standard events:
 
 #### Parent → Game Events
 
-| Event | Description | Data Example |
-|-------|-------------|--------------|
-| `startGame` | Start or restart the game | `{ level: 1 }` |
-| `pauseGame` | Pause the game | `{ reason: 'User paused' }` |
-| `resumeGame` | Resume the game | `null` |
-| `resetGame` | Reset game to initial state | `null` |
-| `configUpdate` | Update game configuration | `{ volume: 0.8, difficulty: 'hard' }` |
+| Event          | Description                 | Data Example                          |
+| -------------- | --------------------------- | ------------------------------------- |
+| `startGame`    | Start or restart the game   | `{ level: 1 }`                        |
+| `pauseGame`    | Pause the game              | `{ reason: 'User paused' }`           |
+| `resumeGame`   | Resume the game             | `null`                                |
+| `resetGame`    | Reset game to initial state | `null`                                |
+| `configUpdate` | Update game configuration   | `{ volume: 0.8, difficulty: 'hard' }` |
 
 #### Game → Parent Events
 
-| Event | Description | Data Example |
-|-------|-------------|--------------|
-| `gameLoaded` | Game has finished loading | `{ timestamp: 1234567890 }` |
-| `score` | Score update | `{ score: 1000 }` |
-| `gameOver` | Game has ended | `{ score: 1500, reason: 'completed' }` |
-| `gamePaused` | Game is paused | `null` |
-| `gameResumed` | Game has resumed | `null` |
-| `levelComplete` | Level completed | `{ level: 1, score: 500 }` |
-| `achievement` | Achievement unlocked | `{ id: 'first-win', name: 'First Victory' }` |
+| Event           | Description               | Data Example                                 |
+| --------------- | ------------------------- | -------------------------------------------- |
+| `gameLoaded`    | Game has finished loading | `{ timestamp: 1234567890 }`                  |
+| `score`         | Score update              | `{ score: 1000 }`                            |
+| `gameOver`      | Game has ended            | `{ score: 1500, reason: 'completed' }`       |
+| `gamePaused`    | Game is paused            | `null`                                       |
+| `gameResumed`   | Game has resumed          | `null`                                       |
+| `levelComplete` | Level completed           | `{ level: 1, score: 500 }`                   |
+| `achievement`   | Achievement unlocked      | `{ id: 'first-win', name: 'First Victory' }` |
 
 ---
 
@@ -189,48 +200,50 @@ While you can define custom events, here are some recommended standard events:
 ### Basic Web Integration
 
 **Parent Page (HTML):**
+
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>My Game Platform</title>
-</head>
-<body>
-  <iframe id="gameFrame" src="game.html" width="800" height="600"></iframe>
-  
-  <script type="module">
-    import MagnetHubCore from './src/magnethub-core.js';
-    
-    const hub = new MagnetHubCore({ iframeId: 'gameFrame' });
-    
-    hub.on('score', data => console.log('Score:', data.score));
-    hub.send('startGame', { level: 1 });
-  </script>
-</body>
+  <head>
+    <title>My Game Platform</title>
+  </head>
+  <body>
+    <iframe id="gameFrame" src="game.html" width="800" height="600"></iframe>
+
+    <script type="module">
+      import MagnetHubCore from './src/magnethub-core.js';
+
+      const hub = new MagnetHubCore({ iframeId: 'gameFrame' });
+
+      hub.on('score', (data) => console.log('Score:', data.score));
+      hub.send('startGame', { level: 1 });
+    </script>
+  </body>
 </html>
 ```
 
 **Game Page (HTML):**
+
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>My Game</title>
-</head>
-<body>
-  <canvas id="gameCanvas"></canvas>
-  
-  <script type="module">
-    import MagnetHubGame from './src/magnethub-game.js';
-    
-    const hub = new MagnetHubGame();
-    
-    hub.send('gameLoaded');
-    hub.on('pauseGame', () => {
-      // Pause game logic
-    });
-  </script>
-</body>
+  <head>
+    <title>My Game</title>
+  </head>
+  <body>
+    <canvas id="gameCanvas"></canvas>
+
+    <script type="module">
+      import MagnetHubGame from './src/magnethub-game.js';
+
+      const hub = new MagnetHubGame();
+
+      hub.send('gameLoaded');
+      hub.on('pauseGame', () => {
+        // Pause game logic
+      });
+    </script>
+  </body>
 </html>
 ```
 
@@ -241,6 +254,7 @@ While you can define custom events, here are some recommended standard events:
 Unity games can communicate with the parent page using JavaScript evaluation.
 
 **Unity C# Script:**
+
 ```csharp
 using UnityEngine;
 using System.Runtime.InteropServices;
@@ -271,36 +285,41 @@ public class MagnetHubBridge : MonoBehaviour
 ```
 
 **Unity WebGL Plugin (Assets/Plugins/WebGL/MagnetHubPlugin.jslib):**
+
 ```javascript
 mergeInto(LibraryManager.library, {
-    SendToParent: function(eventName, jsonData) {
-        var event = UTF8ToString(eventName);
-        var data = JSON.parse(UTF8ToString(jsonData));
-        
-        if (window.parent) {
-            window.parent.postMessage({
-                event: event,
-                data: data,
-                source: 'magnethub-game'
-            }, '*');
-        }
+  SendToParent: function (eventName, jsonData) {
+    var event = UTF8ToString(eventName);
+    var data = JSON.parse(UTF8ToString(jsonData));
+
+    if (window.parent) {
+      window.parent.postMessage(
+        {
+          event: event,
+          data: data,
+          source: 'magnethub-game',
+        },
+        '*'
+      );
     }
+  },
 });
 ```
 
 **Receiving Messages in Unity:**
 
 Add this to your HTML template:
+
 ```javascript
 // In your Unity WebGL template
-window.addEventListener('message', function(e) {
-    if (e.data.source === 'magnethub-core') {
-        var event = e.data.event;
-        var data = JSON.stringify(e.data.data || {});
-        
-        // Send to Unity
-        SendMessage('MagnetHubBridge', 'OnParentMessage', event);
-    }
+window.addEventListener('message', function (e) {
+  if (e.data.source === 'magnethub-core') {
+    var event = e.data.event;
+    var data = JSON.stringify(e.data.data || {});
+
+    // Send to Unity
+    SendMessage('MagnetHubBridge', 'OnParentMessage', event);
+  }
 });
 ```
 
@@ -311,6 +330,7 @@ window.addEventListener('message', function(e) {
 Godot can use JavaScript evaluation for communication.
 
 **Godot GDScript:**
+
 ```gdscript
 extends Node
 
@@ -331,7 +351,7 @@ func send_to_parent(event_name: String, data: Dictionary):
             }, '*');
         }
         """ % [event_name, json_data]
-        
+
         JavaScript.eval(js_code)
 
 func send_score(score: int):
@@ -342,6 +362,7 @@ func _on_game_over(final_score: int):
 ```
 
 **Receiving Messages from Parent:**
+
 ```gdscript
 func _ready():
     if OS.has_feature("JavaScript"):
@@ -353,7 +374,7 @@ func setup_message_listener():
         if (e.data.source === 'magnethub-core') {
             // Call Godot function
             godot.MagnetHubBridge.handleParentMessage(
-                e.data.event, 
+                e.data.event,
                 JSON.stringify(e.data.data || {})
             );
         }
@@ -364,7 +385,7 @@ func setup_message_listener():
 # This function will be called from JavaScript
 func handle_parent_message(event: String, json_data: String):
     var data = JSON.parse(json_data).result
-    
+
     match event:
         "pauseGame":
             get_tree().paused = true
@@ -379,42 +400,43 @@ func handle_parent_message(event: String, json_data: String):
 ### Phaser.js Integration
 
 **Phaser Game:**
+
 ```javascript
 import MagnetHubGame from './src/magnethub-game.js';
 
 const hub = new MagnetHubGame();
 
 const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    scene: {
-        create: create,
-        update: update
-    }
+  type: Phaser.AUTO,
+  width: 800,
+  height: 600,
+  scene: {
+    create: create,
+    update: update,
+  },
 };
 
 const game = new Phaser.Game(config);
 
 function create() {
-    // Notify parent game is loaded
-    hub.send('gameLoaded');
-    
-    // Listen for parent commands
-    hub.on('pauseGame', () => {
-        this.scene.pause();
-    });
-    
-    hub.on('resumeGame', () => {
-        this.scene.resume();
-    });
+  // Notify parent game is loaded
+  hub.send('gameLoaded');
+
+  // Listen for parent commands
+  hub.on('pauseGame', () => {
+    this.scene.pause();
+  });
+
+  hub.on('resumeGame', () => {
+    this.scene.resume();
+  });
 }
 
 function update() {
-    // Send score updates
-    if (scoreChanged) {
-        hub.send('score', { score: currentScore });
-    }
+  // Send score updates
+  if (scoreChanged) {
+    hub.send('score', { score: currentScore });
+  }
 }
 ```
 
@@ -439,11 +461,12 @@ function update() {
 - Don't send sensitive information through postMessage without encryption
 
 **Example with specific origin:**
+
 ```javascript
 // In magnethub-core.js
 this.iframe.contentWindow.postMessage(
   { event, data, source: 'magnethub-core' },
-  'https://yourgamedomain.com'  // Instead of '*'
+  'https://yourgamedomain.com' // Instead of '*'
 );
 ```
 
@@ -452,6 +475,7 @@ this.iframe.contentWindow.postMessage(
 ## Support
 
 For questions, issues, or feature requests, please visit:
+
 - GitHub Issues: https://github.com/magnet-hub/magnethub-sdk/issues
 - Documentation: https://github.com/magnet-hub/magnethub-sdk
 

@@ -23,16 +23,19 @@ Current Version: **0.1.0**
 ### 1. npm (Recommended)
 
 #### Install Latest Version
+
 ```bash
 npm install @magnethub/sdk
 ```
 
 #### Install Specific Version
+
 ```bash
 npm install @magnethub/sdk@0.1.0
 ```
 
 #### Install Version Range
+
 ```bash
 # Latest patch of 0.1.x
 npm install @magnethub/sdk@^0.1.0
@@ -45,6 +48,7 @@ npm install @magnethub/sdk@~0.1.0
 ```
 
 #### Check Installed Version
+
 ```javascript
 import MagnetHubCore from '@magnethub/sdk';
 console.log(MagnetHubCore.VERSION); // "0.1.0"
@@ -55,6 +59,7 @@ console.log(MagnetHubCore.VERSION); // "0.1.0"
 ### 2. CDN (unpkg)
 
 #### Latest Version (Auto-updates)
+
 ```html
 <script type="module">
   import MagnetHubCore from 'https://unpkg.com/@magnethub/sdk/src/magnethub-core.js';
@@ -63,6 +68,7 @@ console.log(MagnetHubCore.VERSION); // "0.1.0"
 ```
 
 #### Specific Version (Locked)
+
 ```html
 <script type="module">
   import MagnetHubCore from 'https://unpkg.com/@magnethub/sdk@0.1.0/src/magnethub-core.js';
@@ -71,6 +77,7 @@ console.log(MagnetHubCore.VERSION); // "0.1.0"
 ```
 
 #### Version Range
+
 ```html
 <!-- Latest 0.1.x version -->
 <script type="module">
@@ -83,6 +90,7 @@ console.log(MagnetHubCore.VERSION); // "0.1.0"
 ### 3. CDN (jsDelivr)
 
 #### Latest Version
+
 ```html
 <script type="module">
   import MagnetHubCore from 'https://cdn.jsdelivr.net/npm/@magnethub/sdk/src/magnethub-core.js';
@@ -90,6 +98,7 @@ console.log(MagnetHubCore.VERSION); // "0.1.0"
 ```
 
 #### Specific Version
+
 ```html
 <script type="module">
   import MagnetHubCore from 'https://cdn.jsdelivr.net/npm/@magnethub/sdk@0.1.0/src/magnethub-core.js';
@@ -101,6 +110,7 @@ console.log(MagnetHubCore.VERSION); // "0.1.0"
 ### 4. GitHub Releases
 
 #### Download Specific Release
+
 ```bash
 # Via wget
 wget https://github.com/magnet-hub/magnethub-sdk/archive/refs/tags/v0.1.0.zip
@@ -110,6 +120,7 @@ curl -L https://github.com/magnet-hub/magnethub-sdk/archive/refs/tags/v0.1.0.tar
 ```
 
 #### Clone Specific Tag
+
 ```bash
 git clone --branch v0.1.0 https://github.com/magnet-hub/magnethub-sdk.git
 ```
@@ -119,6 +130,7 @@ git clone --branch v0.1.0 https://github.com/magnet-hub/magnethub-sdk.git
 ## 🏷️ Checking SDK Version
 
 ### In Browser Console
+
 ```javascript
 import MagnetHubCore from '@magnethub/sdk';
 import MagnetHubGame from '@magnethub/sdk/src/magnethub-game.js';
@@ -128,6 +140,7 @@ console.log('Game Version:', MagnetHubGame.VERSION);
 ```
 
 ### In package.json
+
 ```json
 {
   "dependencies": {
@@ -137,6 +150,7 @@ console.log('Game Version:', MagnetHubGame.VERSION);
 ```
 
 Check installed version:
+
 ```bash
 npm list @magnethub/sdk
 ```
@@ -148,17 +162,21 @@ npm list @magnethub/sdk
 ### Upgrading to a New Version
 
 #### 1. Update package.json
+
 ```bash
 npm install @magnethub/sdk@latest
 ```
 
 #### 2. Check Changelog
+
 Review `CHANGELOG.md` for breaking changes.
 
 #### 3. Update Your Code
+
 Follow migration guides for major version changes.
 
 ### Downgrading to Previous Version
+
 ```bash
 npm install @magnethub/sdk@0.1.0
 ```
@@ -167,11 +185,12 @@ npm install @magnethub/sdk@0.1.0
 
 ## 📋 Version Compatibility
 
-| SDK Version | Browser Support | Node.js |
-|-------------|----------------|---------|
-| 0.1.0       | Modern browsers (ES6+) | 14+ |
+| SDK Version | Browser Support        | Node.js |
+| ----------- | ---------------------- | ------- |
+| 0.1.0       | Modern browsers (ES6+) | 14+     |
 
 ### Browser Compatibility
+
 - ✅ Chrome 63+
 - ✅ Firefox 60+
 - ✅ Safari 11.1+
@@ -184,6 +203,7 @@ npm install @magnethub/sdk@0.1.0
 For production environments, **always pin to a specific version**:
 
 ### ❌ Don't (Auto-updates)
+
 ```json
 {
   "dependencies": {
@@ -193,6 +213,7 @@ For production environments, **always pin to a specific version**:
 ```
 
 ### ✅ Do (Locked version)
+
 ```json
 {
   "dependencies": {
@@ -202,6 +223,7 @@ For production environments, **always pin to a specific version**:
 ```
 
 ### ✅ Also Good (Patch updates only)
+
 ```json
 {
   "dependencies": {
@@ -226,6 +248,7 @@ git commit -m "chore: lock dependencies"
 ## 🏷️ Creating New Releases (Maintainers)
 
 ### 1. Update Version
+
 ```bash
 # Patch (0.1.0 -> 0.1.1)
 npm version patch
@@ -238,11 +261,13 @@ npm version major
 ```
 
 ### 2. Update Changelog
+
 ```bash
 # Add changes to CHANGELOG.md
 ```
 
 ### 3. Commit & Tag
+
 ```bash
 git add .
 git commit -m "chore: release v0.2.0"
@@ -251,20 +276,22 @@ git push origin main --tags
 ```
 
 ### 4. Publish to npm
+
 ```bash
 npm publish --access public
 ```
 
 ### 5. Create GitHub Release
+
 Go to: https://github.com/magnet-hub/magnethub-sdk/releases/new
 
 ---
 
 ## 🔄 Version History
 
-| Version | Release Date | Notes |
-|---------|--------------|-------|
-| 0.1.0   | 2025-11-10  | Initial release |
+| Version | Release Date | Notes           |
+| ------- | ------------ | --------------- |
+| 0.1.0   | 2025-11-10   | Initial release |
 
 ---
 

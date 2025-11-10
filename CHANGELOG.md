@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
+
 - Unit tests
 - TypeScript source files
 - React wrapper component
@@ -18,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2025-11-10
 
 ### Added
+
 - Initial release of MagnetHub SDK
 - `MagnetHubCore` class for parent page communication
 - `MagnetHubGame` class for iframe/game communication
@@ -32,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Version tracking system
 
 ### Features
+
 - ✨ Framework-agnostic design
 - 🔄 Bidirectional event messaging
 - 🎮 Game engine integration examples (Unity, Godot, Phaser)
@@ -40,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🎯 Lightweight (no dependencies)
 
 ### Documentation
+
 - README with installation and usage
 - API reference documentation
 - Integration examples for popular game engines
