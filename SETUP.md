@@ -18,11 +18,13 @@ Your MagnetHub SDK project is now ready with:
 ## 🎯 Quick Test (5 seconds)
 
 1. **Start the local server:**
+
    ```bash
    npx serve examples
    ```
 
 2. **Open your browser:**
+
    ```
    http://localhost:3000/parent.html
    ```
@@ -95,15 +97,17 @@ magnethub-sdk/
 ## 🎮 Basic Usage
 
 ### Parent Page
+
 ```javascript
 import MagnetHubCore from './src/magnethub-core.js';
 
 const hub = new MagnetHubCore({ iframeId: 'gameFrame' });
-hub.on('score', data => console.log('Score:', data.score));
+hub.on('score', (data) => console.log('Score:', data.score));
 hub.send('startGame', { level: 1 });
 ```
 
 ### Game Iframe
+
 ```javascript
 import MagnetHubGame from './src/magnethub-game.js';
 
@@ -115,12 +119,15 @@ hub.on('pauseGame', () => console.log('Paused!'));
 ## 🌐 Integration with Game Engines
 
 ### Unity WebGL
+
 See `docs/api.md` for complete Unity integration with C# bridge and .jslib plugin.
 
 ### Godot Web Export
+
 See `docs/api.md` for GDScript integration examples.
 
 ### Phaser.js
+
 See `docs/api.md` for Phaser integration examples.
 
 ## 📚 Next Steps
@@ -134,16 +141,19 @@ See `docs/api.md` for Phaser integration examples.
 ## 🐛 Troubleshooting
 
 ### Iframe not loading?
+
 - Make sure you're using an HTTP server (not `file://`)
 - Check browser console for CORS errors
 - Verify the iframe `src` path is correct
 
 ### Messages not sending?
+
 - Ensure both parent and game are using the SDK
 - Check that event names match exactly
 - Look for console warnings about validation
 
 ### TypeScript errors?
+
 - Make sure `index.d.ts` is in your project root
 - Update your `tsconfig.json` to include the types
 
