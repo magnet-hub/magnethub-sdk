@@ -1,0 +1,5 @@
+# Ignore source files from Prettier formatting
+src/**/*.js
+
+# Ignore examples (they have inline SDK code)
+examples/**/*.html
