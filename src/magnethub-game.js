@@ -39,7 +39,7 @@ class MagnetHubGame {
       window.parent.postMessage({ event, data, source: 'magnethub-game' }, '*');
     } else {
       console.warn(
-        'MagnetHub: Cannot send message, no parent window available.'
+        'MagnetHub: Cannot send message, no parent window available.',
       );
     }
   }
@@ -53,7 +53,7 @@ class MagnetHubGame {
   on(event, callback) {
     if (typeof callback !== 'function') {
       console.warn(
-        `MagnetHub: Callback for event "${event}" must be a function.`
+        `MagnetHub: Callback for event "${event}" must be a function.`,
       );
       return;
     }

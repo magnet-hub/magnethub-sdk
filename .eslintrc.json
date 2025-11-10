@@ -17,6 +17,11 @@
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "prefer-const": "error",
     "arrow-spacing": "error",
-    "no-var": "error"
+    "no-var": "error",
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+    "comma-dangle": ["error", "always-multiline"],
+    "object-curly-spacing": ["error", "always"],
+    "space-before-blocks": "error",
+    "keyword-spacing": "error"
   }
 }
