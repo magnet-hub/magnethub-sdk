@@ -1,6 +1,6 @@
 {
   "name": "magnethub-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Two-way communication SDK for iframe-based WebGL games.",
   "main": "src/magnethub-core.js",
   "type": "module",

@@ -1,191 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MagnetHub Parent Example</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #f5f5f5;
-    }
-    h2 {
-      color: #333;
-    }
-    .controls {
-      margin: 20px 0;
-      padding: 15px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    button {
-      margin: 5px;
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    button.danger {
-      background-color: #f44336;
-    }
-    button.danger:hover {
-      background-color: #da190b;
-    }
-    #gameFrame {
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      background: white;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    .log {
-      margin-top: 20px;
-      padding: 15px;
-      background: #333;
-      color: #0f0;
-      font-family: 'Courier New', monospace;
-      border-radius: 8px;
-      max-height: 200px;
-      overflow-y: auto;
-      font-size: 12px;
-    }
-    .log div {
-      margin: 5px 0;
-    }
-  </style>
-</head>
-<body>
-  <h2>🧲 MagnetHub Parent Page</h2>
-  
-  <div class="controls">
-    <h3>Controls</h3>
-    <button id="startGame">▶️ Start Game</button>
-    <button id="pauseGame">⏸️ Pause Game</button>
-    <button id="resumeGame">▶️ Resume Game</button>
-    <button id="resetGame" class="danger">🔄 Reset Game</button>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MagnetHub Parent Example</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      h2 {
+        color: #333;
+      }
+      .controls {
+        margin: 20px 0;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      button {
+        margin: 5px;
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      button.danger {
+        background-color: #f44336;
+      }
+      button.danger:hover {
+        background-color: #da190b;
+      }
+      #gameFrame {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        background: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .log {
+        margin-top: 20px;
+        padding: 15px;
+        background: #333;
+        color: #0f0;
+        font-family: "Courier New", monospace;
+        border-radius: 8px;
+        max-height: 200px;
+        overflow-y: auto;
+        font-size: 12px;
+      }
+      .log div {
+        margin: 5px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>🧲 MagnetHub Parent Page</h2>
 
-  <iframe id="gameFrame" src="game.html" width="800" height="600"></iframe>
+    <div class="controls">
+      <h3>Game Controls</h3>
+      <button id="pauseGame">⏸️ Pause Game</button>
+      <button id="resumeGame">▶️ Resume Game</button>
+      <button id="showAd">📺 Show Ad (Interstitial)</button>
+      <button id="showRewardedAd">🎁 Show Rewarded Ad</button>
+    </div>
 
-  <div class="log" id="log">
-    <div>📡 Console Log:</div>
-  </div>
+    <div class="controls">
+      <h3>Data/Save Controls</h3>
+      <button id="saveData">💾 Save High Score</button>
+      <button id="loadData">� Load High Score</button>
+      <button id="sendData">📤 Send Data to Game</button>
+    </div>
 
-  <script type="module">
-    // Inline MagnetHub Core SDK for standalone example
-    class MagnetHubCore {
-      constructor({ iframeId, apiKey }) {
-        this.iframe = document.getElementById(iframeId);
-        this.apiKey = apiKey;
-        this.events = {};
+    <iframe id="gameFrame" src="game.html" width="800" height="600"></iframe>
 
-        if (!this.iframe) {
-          console.warn(`MagnetHub: Iframe with id "${iframeId}" not found.`);
+    <div class="log" id="log">
+      <div>📡 Parent Console:</div>
+    </div>
+
+    <script type="module">
+      // Inline MagnetHub Core SDK for standalone example
+      class MagnetHubCore {
+        constructor({ iframeId, apiKey }) {
+          this.iframe = document.getElementById(iframeId);
+          this.apiKey = apiKey;
+          this._events = {};
+          this._data = {};
+
+          if (!this.iframe) {
+            console.warn(`MagnetHub: Iframe with id "${iframeId}" not found.`);
+          }
+
+          window.addEventListener("message", (e) => this._handleMessage(e));
         }
 
-        window.addEventListener('message', (e) => this._handleMessage(e));
-      }
+        _send(event, data = null) {
+          if (this.iframe && this.iframe.contentWindow) {
+            this.iframe.contentWindow.postMessage(
+              { event, data, source: "magnethub-core" },
+              "*"
+            );
+          }
+        }
 
-      send(event, data = null) {
-        if (this.iframe && this.iframe.contentWindow) {
-          this.iframe.contentWindow.postMessage(
-            { event, data, source: 'magnethub-core' },
-            '*'
-          );
-        } else {
-          console.warn('MagnetHub: Cannot send message, iframe not available.');
+        _on(event, callback) {
+          if (typeof callback === "function") {
+            this._events[event] = callback;
+          }
+        }
+
+        _handleMessage(e) {
+          const { event, data, source } = e.data || {};
+          if (source === "magnethub-game" && event && this._events[event]) {
+            this._events[event](data);
+          }
+        }
+
+        // Game Control Methods
+        pauseGame(pauseData = {}) {
+          this._send("pauseGame", pauseData);
+        }
+
+        resumeGame(resumeData = {}) {
+          this._send("resumeGame", resumeData);
+        }
+
+        // Event Listeners
+        onGameLoaded(callback) {
+          this._on("gameLoaded", callback);
+        }
+
+        onGameStart(callback) {
+          this._on("gameStart", callback);
+        }
+
+        onGameOver(callback) {
+          this._on("gameOver", callback);
+        }
+
+        onLevelStart(callback) {
+          this._on("levelStart", callback);
+        }
+
+        onLevelEnd(callback) {
+          this._on("levelEnd", callback);
+        }
+
+        onScoreUpdate(callback) {
+          this._on("scoreUpdate", callback);
+        }
+
+        // Ad Methods
+        onShowAd(callback) {
+          this._on("showAd", callback);
+        }
+
+        adDisplayed(requestId, adType, result = {}) {
+          this._send("adDisplayed", { requestId, adType, ...result });
+        }
+
+        // Data/Save Methods
+        onSetData(callback) {
+          this._on("setData", callback);
+        }
+
+        onGetData(callback) {
+          this._on("getData", callback);
+        }
+
+        setData(key, value) {
+          this._data[key] = value;
+          this._send("setData", { key, value });
+        }
+
+        getData(key) {
+          return this._data[key];
+        }
+
+        sendData(key, value) {
+          this._send(`data:${key}`, value);
         }
       }
 
-      on(event, callback) {
-        if (typeof callback !== 'function') {
-          console.warn(`MagnetHub: Callback for event "${event}" must be a function.`);
-          return;
-        }
-        this.events[event] = callback;
+      const log = document.getElementById("log");
+      let currentHighScore = 0;
+
+      function addLog(message) {
+        const entry = document.createElement("div");
+        entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        log.appendChild(entry);
+        log.scrollTop = log.scrollHeight;
       }
 
-      _handleMessage(e) {
-        const { event, data, source } = e.data || {};
-        
-        if (source === 'magnethub-game' && event && this.events[event]) {
-          this.events[event](data);
+      // Initialize MagnetHub SDK
+      const hub = new MagnetHubCore({
+        iframeId: "gameFrame",
+        apiKey: "demo-api-key-xyz",
+      });
+      addLog("✅ MagnetHub Core SDK initialized");
+
+      // Listen for game lifecycle events
+      hub.onGameLoaded((data) => {
+        addLog(
+          `🎮 Game loaded: ${data?.title || "Unknown"} v${
+            data?.version || "1.0"
+          }`
+        );
+      });
+
+      hub.onGameStart((data) => {
+        addLog("🚀 Game started!");
+      });
+
+      hub.onGameOver((data) => {
+        addLog(`� Game over! Final score: ${data?.score || 0}`);
+        if (data?.score > currentHighScore) {
+          currentHighScore = data.score;
+          addLog(`🏆 New high score: ${currentHighScore}`);
         }
-      }
-    }
-    
-    const log = document.getElementById('log');
-    
-    function addLog(message) {
-      const entry = document.createElement('div');
-      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-      log.appendChild(entry);
-      log.scrollTop = log.scrollHeight;
-    }
+      });
 
-    // Initialize MagnetHub SDK
-    const hub = new MagnetHubCore({ iframeId: 'gameFrame', apiKey: 'demo-api-key-xyz' });
-    addLog('✅ MagnetHub SDK initialized');
+      // Listen for level events
+      hub.onLevelStart((data) => {
+        addLog(`🎯 Level ${data?.level} started`);
+      });
 
-    // Listen for events from the game
-    hub.on('gameLoaded', (data) => {
-      addLog('🎮 Game loaded successfully');
-      console.log('Game loaded:', data);
-    });
+      hub.onLevelEnd((data) => {
+        addLog(
+          `✅ Level ${data?.level} completed - Score: ${data?.score || 0}`
+        );
+      });
 
-    hub.on('score', (data) => {
-      addLog(`🎯 Score received: ${data.score}`);
-      console.log('Score:', data);
-    });
+      // Listen for score updates
+      hub.onScoreUpdate((data) => {
+        addLog(`📊 Score update: ${data?.score || 0}`);
+      });
 
-    hub.on('gameOver', (data) => {
-      addLog(`🏁 Game over! Final score: ${data.score}`);
-      console.log('Game over:', data);
-    });
+      // Listen for ad requests
+      hub.onShowAd((data) => {
+        const adType = data?.adType || "interstitial";
+        const requestId = data?.requestId;
+        addLog(`📺 Ad requested: ${adType} (ID: ${requestId})`);
 
-    hub.on('gamePaused', () => {
-      addLog('⏸️ Game paused');
-    });
+        // Simulate ad display
+        setTimeout(() => {
+          const success = Math.random() > 0.2; // 80% success rate
+          if (success) {
+            hub.adDisplayed(requestId, adType, {
+              completed: true,
+              rewarded: adType === "rewarded",
+            });
+            addLog(`✅ Ad completed: ${adType}`);
+          } else {
+            hub.adDisplayed(requestId, adType, {
+              error: "Ad failed to load",
+              completed: false,
+            });
+            addLog(`❌ Ad failed: ${adType}`);
+          }
+        }, 1500);
+      });
 
-    hub.on('gameResumed', () => {
-      addLog('▶️ Game resumed');
-    });
+      // Listen for data save requests
+      hub.onSetData((data) => {
+        addLog(
+          `💾 Game saved data: ${data?.key} = ${JSON.stringify(data?.value)}`
+        );
+        hub.setData(data?.key, data?.value); // Store it
+      });
 
-    // Control buttons
-    document.getElementById('startGame').addEventListener('click', () => {
-      hub.send('startGame', { level: 1 });
-      addLog('📤 Sent: startGame');
-    });
+      // Listen for data load requests
+      hub.onGetData((data) => {
+        const key = data?.key;
+        const value = hub.getData(key);
+        addLog(`📥 Game requested data: ${key} = ${JSON.stringify(value)}`);
+        hub.sendData(key, value);
+      });
 
-    document.getElementById('pauseGame').addEventListener('click', () => {
-      hub.send('pauseGame', { reason: 'User clicked pause' });
-      addLog('📤 Sent: pauseGame');
-    });
+      // Control buttons
+      document.getElementById("pauseGame").addEventListener("click", () => {
+        hub.pauseGame({ reason: "User clicked pause button" });
+        addLog("📤 Sent: pauseGame");
+      });
 
-    document.getElementById('resumeGame').addEventListener('click', () => {
-      hub.send('resumeGame');
-      addLog('📤 Sent: resumeGame');
-    });
+      document.getElementById("resumeGame").addEventListener("click", () => {
+        hub.resumeGame();
+        addLog("📤 Sent: resumeGame");
+      });
 
-    document.getElementById('resetGame').addEventListener('click', () => {
-      hub.send('resetGame');
-      addLog('📤 Sent: resetGame');
-    });
+      document.getElementById("showAd").addEventListener("click", () => {
+        // Manually trigger ad display (normally game requests this)
+        const requestId = `manual_${Date.now()}`;
+        hub.adDisplayed(requestId, "interstitial", { completed: true });
+        addLog("📤 Manually triggered ad display");
+      });
 
-    // Auto-send start game after iframe loads
-    setTimeout(() => {
-      hub.send('startGame', { level: 1 });
-      addLog('📤 Auto-sent: startGame');
-    }, 1000);
-  </script>
-</body>
+      document
+        .getElementById("showRewardedAd")
+        .addEventListener("click", () => {
+          const requestId = `manual_${Date.now()}`;
+          hub.adDisplayed(requestId, "rewarded", {
+            completed: true,
+            rewarded: true,
+          });
+          addLog("📤 Manually triggered rewarded ad");
+        });
+
+      document.getElementById("saveData").addEventListener("click", () => {
+        hub.setData("parentHighScore", currentHighScore);
+        addLog(`� Saved high score: ${currentHighScore}`);
+      });
+
+      document.getElementById("loadData").addEventListener("click", () => {
+        const score = hub.getData("parentHighScore") || 0;
+        addLog(`📥 Loaded high score: ${score}`);
+      });
+
+      document.getElementById("sendData").addEventListener("click", () => {
+        hub.sendData("cloudSave", {
+          score: currentHighScore,
+          timestamp: Date.now(),
+        });
+        addLog("📤 Sent cloud save data to game");
+      });
+    </script>
+  </body>
 </html>

@@ -19,25 +19,49 @@ export interface MagnetHubCoreOptions {
 export type EventCallback = (data?: any) => void;
 
 /**
+ * Ad type options
+ */
+export type AdType = "interstitial" | "rewarded" | "banner";
+
+/**
+ * Ad display result
+ */
+export interface AdResult {
+  /** Request ID for this ad */
+  requestId: string;
+  /** Type of ad displayed */
+  adType: AdType;
+  /** Whether the ad was completed */
+  completed?: boolean;
+  /** Whether the ad was skipped */
+  skipped?: boolean;
+  /** Error message if ad failed */
+  error?: string;
+  /** Whether user should receive reward (for rewarded ads) */
+  rewarded?: boolean;
+}
+
+/**
  * MagnetHub Core SDK - Parent Page
- * 
- * Enables two-way communication between a parent page and an embedded game iframe.
+ *
+ * Enables communication between a parent page and an embedded game iframe.
+ * Uses predetermined methods only for type safety and clarity.
  */
 export class MagnetHubCore {
+  /**
+   * SDK Version
+   */
+  static VERSION: string;
+
   /**
    * The iframe element
    */
   iframe: HTMLIFrameElement | null;
-  
+
   /**
    * API key for authentication
    */
   apiKey?: string;
-  
-  /**
-   * Registered event callbacks
-   */
-  events: Record<string, EventCallback>;
 
   /**
    * Creates an instance of MagnetHubCore
@@ -45,37 +69,45 @@ export class MagnetHubCore {
    */
   constructor(options: MagnetHubCoreOptions);
 
-  /**
-   * Sends a message to the embedded game iframe
-   * @param event - The event name
-   * @param data - Optional data to send with the event
-   */
-  send(event: string, data?: any): void;
+  // Game Control Methods
+  pauseGame(pauseData?: any): void;
+  resumeGame(resumeData?: any): void;
 
-  /**
-   * Registers a callback for a specific event from the game iframe
-   * @param event - The event name to listen for
-   * @param callback - The callback function to execute when the event is received
-   */
-  on(event: string, callback: EventCallback): void;
+  // Event Listeners
+  onGameLoaded(callback: EventCallback): void;
+  onGameStart(callback: EventCallback): void;
+  onGameOver(callback: EventCallback): void;
+  onLevelStart(callback: EventCallback): void;
+  onLevelEnd(callback: EventCallback): void;
+  onScoreUpdate(callback: EventCallback): void;
 
-  /**
-   * Internal handler for incoming messages
-   * @private
-   */
-  private _handleMessage(e: MessageEvent): void;
+  // Ad Methods
+  onShowAd(callback: EventCallback): void;
+  adDisplayed(
+    requestId: string,
+    adType: AdType,
+    result?: Partial<AdResult>
+  ): void;
+
+  // Data/Save Methods
+  onSetData(callback: EventCallback): void;
+  onGetData(callback: EventCallback): void;
+  setData(key: string, value: any): void;
+  getData(key: string): any;
+  sendData(key: string, value: any): void;
 }
 
 /**
  * MagnetHub Game SDK - Iframe/Game Side
- * 
- * Enables two-way communication between an embedded game and its parent page.
+ *
+ * Enables communication between an embedded game and its parent page.
+ * Uses predetermined methods only for type safety and clarity.
  */
 export class MagnetHubGame {
   /**
-   * Registered event callbacks
+   * SDK Version
    */
-  events: Record<string, EventCallback>;
+  static VERSION: string;
 
   /**
    * Creates an instance of MagnetHubGame
@@ -83,25 +115,29 @@ export class MagnetHubGame {
    */
   constructor();
 
-  /**
-   * Sends a message to the parent page
-   * @param event - The event name
-   * @param data - Optional data to send with the event
-   */
-  send(event: string, data?: any): void;
+  // Game Lifecycle Methods
+  gameLoaded(metadata?: any): void;
+  gameStart(gameData?: any): void;
+  gameOver(results?: any): void;
+  onPause(callback: EventCallback): void;
+  onResume(callback: EventCallback): void;
 
-  /**
-   * Registers a callback for a specific event from the parent page
-   * @param event - The event name to listen for
-   * @param callback - The callback function to execute when the event is received
-   */
-  on(event: string, callback: EventCallback): void;
+  // Level Methods
+  levelStart(level: number | string, levelData?: any): void;
+  levelEnd(level: number | string, results?: any): void;
 
-  /**
-   * Internal handler for incoming messages
-   * @private
-   */
-  private _handleMessage(e: MessageEvent): void;
+  // Score Methods
+  updateScore(score: number, metadata?: any): void;
+
+  // Ad Methods
+  showAd(adType?: AdType, options?: any): Promise<AdResult>;
+  showInterstitial(options?: any): Promise<AdResult>;
+  showRewarded(options?: any): Promise<AdResult>;
+
+  // Data/Save Methods
+  setData(key: string, value: any): void;
+  getData(key: string): any;
+  loadData(key: string): Promise<any>;
 }
 
 /**
@@ -113,7 +149,7 @@ export interface MagnetHubMessage {
   /** Optional data payload */
   data?: any;
   /** Source identifier */
-  source: 'magnethub-core' | 'magnethub-game';
+  source: "magnethub-core" | "magnethub-game";
 }
 
 export default MagnetHubCore;
