@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MagnetHub Test Parent - Catch the Stars</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    
+    .header {
+      max-width: 1200px;
+      margin: 0 auto 20px;
+      text-align: center;
+    }
+    
+    h1 {
+      color: #333;
+      margin: 0 0 10px 0;
+    }
+    
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .controls {
+      max-width: 1200px;
+      margin: 0 auto 20px;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .controls h3 {
+      margin: 0 0 15px 0;
+      color: #667eea;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    button {
+      padding: 12px 24px;
+      background-color: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    button:hover {
+      background-color: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button.pause {
+      background-color: #ffd93d;
+      color: #333;
+    }
+    
+    button.pause:hover {
+      background-color: #ffc107;
+    }
+    
+    button.danger {
+      background-color: #ff6b6b;
+    }
+    
+    button.danger:hover {
+      background-color: #ff5252;
+    }
+    
+    .game-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    #gameFrame {
+      border: none;
+      display: block;
+      width: 100%;
+      height: 600px;
+    }
+    
+    .log {
+      max-width: 1200px;
+      margin: 20px auto 0;
+      padding: 20px;
+      background: #1e1e1e;
+      color: #4ec9b0;
+      font-family: 'Courier New', monospace;
+      border-radius: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 13px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .log div {
+      margin: 5px 0;
+      line-height: 1.5;
+    }
+    
+    .log .received {
+      color: #569cd6;
+    }
+    
+    .log .sent {
+      color: #4ec9b0;
+    }
+    
+    .log .event {
+      color: #dcdcaa;
+    }
+    
+    .log .success {
+      color: #4ec9b0;
+    }
+    
+    .status-bar {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 15px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .status-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .status-label {
+      font-size: 12px;
+      opacity: 0.9;
+      margin-bottom: 5px;
+    }
+    
+    .status-value {
+      font-size: 24px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🧲 MagnetHub SDK Test - Catch the Stars</h1>
+    <p class="subtitle">Control the game using the buttons below</p>
+  </div>
+  
+  <div class="status-bar">
+    <div class="status-item">
+      <div class="status-label">Game Status</div>
+      <div class="status-value" id="gameStatus">⏳ Loading...</div>
+    </div>
+    <div class="status-item">
+      <div class="status-label">Current Score</div>
+      <div class="status-value" id="currentScore">0</div>
+    </div>
+    <div class="status-item">
+      <div class="status-label">High Score</div>
+      <div class="status-value" id="highScore">0</div>
+    </div>
+  </div>
+  
+  <div class="controls">
+    <h3>🎮 Game Controls</h3>
+    <div class="button-group">
+      <button id="startGame">
+        <span>▶️</span>
+        <span>Start Game</span>
+      </button>
+      <button id="pauseGame" class="pause">
+        <span>⏸️</span>
+        <span>Pause Game</span>
+      </button>
+      <button id="resumeGame">
+        <span>▶️</span>
+        <span>Resume Game</span>
+      </button>
+      <button id="resetGame" class="danger">
+        <span>🔄</span>
+        <span>Reset Game</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="game-wrapper">
+    <iframe id="gameFrame" src="test-game.html"></iframe>
+  </div>
+
+  <div class="log" id="log">
+    <div class="success">📡 MagnetHub Console Log - Ready</div>
+  </div>
+
+  <script type="module">
+    import MagnetHubCore from 'https://unpkg.com/magnethub-sdk@0.1.0/src/magnethub-core.js';
+    
+    const log = document.getElementById('log');
+    const gameStatus = document.getElementById('gameStatus');
+    const currentScore = document.getElementById('currentScore');
+    const highScore = document.getElementById('highScore');
+    
+    let currentGameScore = 0;
+    let highGameScore = 0;
+    
+    function addLog(message, type = 'info') {
+      const entry = document.createElement('div');
+      entry.className = type;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+    
+    function updateStatus(status) {
+      gameStatus.textContent = status;
+    }
+
+    // Initialize MagnetHub SDK
+    const hub = new MagnetHubCore({ 
+      iframeId: 'gameFrame', 
+      apiKey: 'test-api-key-123' 
+    });
+    
+    addLog('✅ MagnetHub SDK initialized', 'success');
+
+    // Listen for events from the game
+    hub.on('gameLoaded', (data) => {
+      addLog('🎮 Game loaded and ready', 'received');
+      updateStatus('✅ Ready');
+      console.log('Game loaded:', data);
+    });
+
+    hub.on('gameStarted', (data) => {
+      addLog('🎮 Game started', 'received');
+      updateStatus('▶️ Playing');
+      console.log('Game started:', data);
+    });
+
+    hub.on('score', (data) => {
+      currentGameScore = data.score;
+      currentScore.textContent = data.score;
+      addLog(`🎯 Score update: ${data.score}`, 'received');
+    });
+
+    hub.on('gameOver', (data) => {
+      addLog(`🏁 Game Over! Final score: ${data.score}`, 'event');
+      updateStatus('🏁 Game Over');
+      if (data.highScore) {
+        highGameScore = data.highScore;
+        highScore.textContent = data.highScore;
+      }
+      console.log('Game over:', data);
+    });
+
+    hub.on('gamePaused', (data) => {
+      addLog('⏸️ Game paused', 'received');
+      updateStatus('⏸️ Paused');
+      console.log('Game paused:', data);
+    });
+
+    hub.on('gameResumed', (data) => {
+      addLog('▶️ Game resumed', 'received');
+      updateStatus('▶️ Playing');
+      console.log('Game resumed:', data);
+    });
+
+    // Control buttons
+    document.getElementById('startGame').addEventListener('click', () => {
+      hub.send('startGame', { level: 1 });
+      addLog('📤 Sent: startGame', 'sent');
+    });
+
+    document.getElementById('pauseGame').addEventListener('click', () => {
+      hub.send('pauseGame', { reason: 'User clicked pause' });
+      addLog('📤 Sent: pauseGame', 'sent');
+    });
+
+    document.getElementById('resumeGame').addEventListener('click', () => {
+      hub.send('resumeGame');
+      addLog('📤 Sent: resumeGame', 'sent');
+    });
+
+    document.getElementById('resetGame').addEventListener('click', () => {
+      hub.send('resetGame');
+      addLog('📤 Sent: resetGame', 'sent');
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      switch(e.key.toLowerCase()) {
+        case 's':
+          hub.send('startGame', { level: 1 });
+          addLog('⌨️ Keyboard: startGame (S)', 'sent');
+          break;
+        case 'p':
+          hub.send('pauseGame');
+          addLog('⌨️ Keyboard: pauseGame (P)', 'sent');
+          break;
+        case 'r':
+          hub.send('resumeGame');
+          addLog('⌨️ Keyboard: resumeGame (R)', 'sent');
+          break;
+      }
+    });
+
+    addLog('💡 Tip: Use keyboard shortcuts - S (Start), P (Pause), R (Resume)', 'info');
+  </script>
+</body>
+</html>
