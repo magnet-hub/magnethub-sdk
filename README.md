@@ -3,7 +3,7 @@
 > A lightweight, framework-agnostic JavaScript SDK for two-way communication between web platforms and embedded games (WebGL, Unity, Godot, Phaser, etc.) using iframes.
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![npm version](https://img.shields.io/npm/v/@magnethub/sdk.svg)](https://www.npmjs.com/package/@magnethub/sdk)
+[![npm version](https://img.shields.io/npm/v/magnethub-sdk.svg)](https://www.npmjs.com/package/magnethub-sdk)
 
 ---
 
@@ -24,10 +24,10 @@
 
 ```bash
 # Latest version
-npm install @magnethub/sdk
+npm install @magnethub-sdk
 
 # Specific version
-npm install @magnethub/sdk@0.1.0
+npm install @magnethub-sdk@0.1.0
 ```
 
 ### Using CDN (unpkg)
