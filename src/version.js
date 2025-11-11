@@ -14,3 +14,4 @@ export const SDK_INFO = {
 };
 
 export default VERSION;
+

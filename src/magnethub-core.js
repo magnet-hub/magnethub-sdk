@@ -19,6 +19,7 @@ class MagnetHubCore {
    * @type {string}
    */
   static VERSION = VERSION;
+
   /**
    * Creates an instance of MagnetHubCore.
    *
@@ -88,3 +89,5 @@ class MagnetHubCore {
 }
 
 export default MagnetHubCore;
+
+
